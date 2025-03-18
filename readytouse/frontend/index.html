@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Skin Cancer Prediction</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; padding: 20px; }
+        #predictionResult { font-size: 18px; margin-top: 20px; }
+    </style>
+</head>
+<body>
+    <h2>Upload an Image for Skin Cancer Prediction</h2>
+    <input type="file" id="imageInput" accept="image/*">
+    <button onclick="uploadImage()">Predict</button>
+    <p id="predictionResult"></p>
+
+    <script>
+        function uploadImage() {
+            let input = document.getElementById("imageInput");
+            if (input.files.length === 0) {
+                alert("Please select an image first!");
+                return;
+            }
+
+            let formData = new FormData();
+            formData.append("image", input.files[0]);
+
+            fetch("http://127.0.0.1:5000/predict", {
+                method: "POST",
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById("predictionResult").innerText = "Predicted: " + data.prediction;
+            })
+            .catch(error => {
+                console.error("Error:", error);
+                alert("Error predicting image");
+            });
+        }
+    </script>
+</body>
+</html>
