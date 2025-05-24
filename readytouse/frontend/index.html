@@ -5,17 +5,97 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Skin Cancer Prediction</title>
     <style>
-        body { font-family: Arial, sans-serif; text-align: center; padding: 20px; }
-        #predictionResult { font-size: 18px; margin-top: 20px; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f6f8fc, #e3f2fd);
+            text-align: center;
+            padding: 40px 20px;
+            color: #333;
+        }
+
+        h2 {
+            color: #1565c0;
+            margin-bottom: 30px;
+        }
+
+        input[type="file"] {
+            padding: 10px;
+            border: 2px dashed #90caf9;
+            border-radius: 10px;
+            background-color: #ffffff;
+            cursor: pointer;
+            margin-bottom: 20px;
+            transition: border-color 0.3s ease;
+        }
+
+        input[type="file"]:hover {
+            border-color: #1976d2;
+        }
+
+        button {
+            padding: 12px 28px;
+            font-size: 16px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            background: linear-gradient(90deg, #1976d2, #42a5f5);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(25, 118, 210, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        button:hover {
+            background: linear-gradient(90deg, #1565c0, #2196f3);
+            transform: scale(1.05);
+            box-shadow: 0 6px 16px rgba(21, 101, 192, 0.4);
+        }
+
+        #predictionResult {
+            font-size: 20px;
+            font-weight: bold;
+            margin-top: 30px;
+            color: #2e7d32;
+        }
+
+        #confidenceValue {
+            font-size: 18px;
+            color: orange;
+            margin-top: 5px;
+        }
+
+        @media (max-width: 600px) {
+            body {
+                padding: 20px 10px;
+            }
+
+            button {
+                width: 100%;
+                margin-top: 10px;
+            }
+        }
     </style>
 </head>
 <body>
     <h2>Upload an Image for Skin Cancer Prediction</h2>
     <input type="file" id="imageInput" accept="image/*">
+    <br>
     <button onclick="uploadImage()">Predict</button>
     <p id="predictionResult"></p>
+    <p id="confidenceValue"></p>
 
     <script>
+        const classMap = {
+            "AK": "Actinic Keratosis",
+            "BCC": "Basal Cell Carcinoma",
+            "BKL": "Benign Keratosis-like Lesions",
+            "DF": "Dermatofibroma",
+            "MEL": "Melanoma",
+            "NV": "Melanocytic Nevi",
+            "VASC": "Vascular Lesions"
+        };
+
         function uploadImage() {
             let input = document.getElementById("imageInput");
             if (input.files.length === 0) {
@@ -32,7 +112,10 @@
             })
             .then(response => response.json())
             .then(data => {
-                document.getElementById("predictionResult").innerText = "Predicted: " + data.prediction;
+                const label = data.prediction;
+                const fullLabel = classMap[label] || label;
+                document.getElementById("predictionResult").innerText = `Predicted: ${fullLabel}`;
+                document.getElementById("confidenceValue").innerText = `Confidence: ${data.confidence}%`;
             })
             .catch(error => {
                 console.error("Error:", error);

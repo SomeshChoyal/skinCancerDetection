@@ -4,6 +4,13 @@ import torch.nn as nn
 from sklearn.preprocessing import LabelEncoder
 
 # Define class labels
+# AK — Actinic Keratosis
+# BCC — Basal Cell Carcinoma
+# BKL — Benign Keratosis-like Lesions (includes seborrheic keratoses and solar lentigines)
+# DF — Dermatofibroma
+# MEL — Melanoma
+# NV — Melanocytic Nevi (common moles)
+# VASC — Vascular Lesions (includes angiomas, angiokeratomas, pyogenic granulomas, and hemorrhages)
 CLASS_LABELS = ["AK", "BCC", "BKL", "DF", "MEL", "NV", "VASC"]
 
 # Encode labels
